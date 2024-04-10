@@ -1,17 +1,22 @@
 // Test script to make sure link from index.html is working
-function displayWorkingMessage() {
-  try {
-    const paragraphElement = document.createElement("p");
-    paragraphElement.innerHTML = "It's working. Yay!";
-    document.body.appendChild(paragraphElement);
 
-    const bodyFirstChild = document.getElementFirstChild("body");
-    if (bodyFirstChild) {
-      bodyFirstChild.classList.add("red");
+function displayWorkingMessage() {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = "It's working! Yay!";
+
+  document.body.appendChild(paragraph);
+
+  let isGreen = true;
+
+  setInterval(() => {
+    if (isGreen) {
+      paragraph.style.color = "green";
+      isGreen = false;
+    } else {
+      paragraph.style.color = "";
+      isGreen = true;
     }
-  } catch (error) {
-    console.error(error);
-  }
+  }, 500);
 }
 
 displayWorkingMessage();
