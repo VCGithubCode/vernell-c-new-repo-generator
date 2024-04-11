@@ -25,7 +25,7 @@ document.addEventListener('contextmenu', function(e) {
   e.preventDefault();
   Swal.fire({
     title: 'Interested in the source code?',
-    text: 'Instead of inspecting my code this way... How about you fork my repo and give it a star instead?',
+    text: 'Hey 🎸⭐️ Rockstar ⭐️🎸 Instead of inspecting my code this way... How about you fork my repo and give it a star ✩ ? Thanks a ton!!! 😌',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Yes, take me there!',
@@ -37,7 +37,7 @@ document.addEventListener('contextmenu', function(e) {
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       Swal.fire(
         'Cancelled',
-        'No worries, feel free to continue exploring!',
+        'No worries... feel free to continue exploring!',
         'error'
       );
     }
