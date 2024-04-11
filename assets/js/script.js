@@ -1,3 +1,14 @@
+  // Check if the user has achieved all 5 star badges
+  const badgeCount = localStorage.getItem('badgeCount') || 0;
+  if (parseInt(badgeCount) >= 5) {
+    const message = document.createElement("p");
+    message.textContent = "Vernell C. thanks you so much for being a part of his tech journey! Please keep in touch!";
+    message.style.fontSize = "1em"; // Adjust font size to match paragraph
+    message.style.marginTop = "10px"; // Add some margin top for spacing
+    document.body.appendChild(message);
+  }
+
+// Function to display the working message
 function displayWorkingMessage() {
   const paragraph = document.createElement("p");
   paragraph.textContent = "It's working! Yay!";
@@ -8,8 +19,24 @@ function displayWorkingMessage() {
       paragraph.style.animation = "1s color-change infinite";
     }
   }, 500);
+
+  // Check if the user has achieved all 5 star badges
+  const badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
+  const messageAlreadyDisplayed = localStorage.getItem('thankYouMessageDisplayed') === 'true';
+
+  if (badgeCount >= 5 && !messageAlreadyDisplayed) {
+    const message = document.createElement("p");
+    message.textContent = "Vernell thanks you so much for being a part of his tech journey! Keep in touch!";
+    message.style.fontSize = "1em"; // Adjust font size to match paragraph
+    message.style.marginTop = "10px"; // Add some margin top for spacing
+    document.body.appendChild(message);
+
+    // Set flag to indicate that the message has been displayed
+    localStorage.setItem('thankYouMessageDisplayed', 'true');
+  }
 }
 
+// Call the function to display the working message
 displayWorkingMessage();
 
 const swalWithBootstrapButtons = Swal.mixin({
@@ -37,11 +64,14 @@ function showAlertAndConfetti() {
     confirmButtonText: 'Yes, take me there!',
     cancelButtonText: 'No, thank you.',
     reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      window.location.href = 'https://github.com/VCGithubCode/vernell-c-new-repo-generator';
-    }
-  });
+}).then((result) => {
+  if (result.isConfirmed) {
+    localStorage.setItem('visitedGithub', 'true'); // Store the user's action
+    awardBadge('Star'); // Award the badge on trust
+  
+    window.location.href = 'https://github.com/VCGithubCode/vernell-c-new-repo-generator';
+  }
+});
 }
 
 // Listen for right-click context menu
@@ -63,13 +93,96 @@ function awardBadge(badgeName) {
   
   document.body.appendChild(badgeContainer);
   
+  // Increment the badge count in localStorage
+  let badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
+  badgeCount++;
+  localStorage.setItem('badgeCount', badgeCount);
+
   // Remove the badge after some time
   setTimeout(() => {
     badgeContainer.remove();
   }, 5000);
 }
 
+// Function to check for text selection
+function checkForSelection() {
+  const selection = window.getSelection();
+  const interactiveWord = document.getElementById('interactive-word');
+  if (selection.containsNode(interactiveWord, true)) {
+    awardBadge('World Highlighter');
+  }
+}
 
+// Add mouseup event listener to check for selection
+document.addEventListener('mouseup', checkForSelection);
+document.addEventListener('touchend', checkForSelection); // For touch devices
+
+
+// Function to create an input field
+function createInputField() {
+  const inputContainer = document.createElement('div');
+  inputContainer.className = 'input-container';
+  inputContainer.innerHTML = `
+    <label for="secret-code">Enter the password if you know the code:</label>
+    <input type="text" id="secret-code" name="secret-code">
+    <button id="submit-button">Submit</button>
+  `;
+  document.body.appendChild(inputContainer);
+
+  const submitButton = inputContainer.querySelector('#submit-button');
+  submitButton.addEventListener('click', handleSubmitButtonClick);
+}
+
+// Function to handle submit button click
+function handleSubmitButtonClick() {
+  checkPasswordAndAwardBadge();
+}
+
+// Function to check password entry and award badge
+function checkPasswordAndAwardBadge() {
+  const inputField = document.getElementById('secret-code');
+  const enteredText = inputField.value.trim().toUpperCase();
+  const passwords = ['IS THERE', 'ISTHERE', 'IS THERE?', 'ISTHERE?'];
+
+  if (passwords.includes(enteredText)) {
+    // Correct password entered
+    awardBadge('Question Everything');
+    inputField.value = ''; // Clear the input field
+    removeInputContainer();
+  } else {
+    // Incorrect password entered
+    inputField.value = ''; // Clear the input field
+    showFeedbackMessage("Find the code, find the clue...");
+  }
+}
+
+// Function to remove the input container
+function removeInputContainer() {
+  const inputContainer = document.querySelector('.input-container');
+  if (inputContainer) {
+    inputContainer.remove();
+  }
+}
+
+// Function to show feedback message
+function showFeedbackMessage(message) {
+  const feedbackMessage = document.createElement('div');
+  feedbackMessage.textContent = message;
+  feedbackMessage.className = 'feedback-message';
+  document.body.appendChild(feedbackMessage);
+
+  // Remove the feedback message after some time
+  setTimeout(() => {
+    feedbackMessage.remove();
+  }, 2000);
+}
+
+// Add dblclick event listener to badge container
+document.addEventListener('dblclick', function(event) {
+  if (event.target.className.includes('badge')) {
+    createInputField();
+  }
+});
 
 document.addEventListener('keydown', function(event) {
   // Check for keys used to open DevTools
@@ -81,3 +194,80 @@ document.addEventListener('keydown', function(event) {
     awardBadge('Curiosity');
   }
 });
+
+const inputField = document.getElementById('secret-code');
+
+
+// Function to check Konami code entry
+function checkKonamiCode() {
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'Enter'];
+  let konamiIndex = 0;
+
+  document.addEventListener('keydown', function (e) {
+    if (e.code === konamiCode[konamiIndex]) {
+      konamiIndex++;
+      if (konamiIndex === konamiCode.length) {
+        // Konami code entered successfully
+        showHiddenText(); // Call function to show hidden text
+        awardBadge('True Hacker'); // Award the True Hacker badge
+        konamiIndex = 0; // Reset index for future use
+        updateInputText(); // Call function to update input text
+      }
+    } else {
+      konamiIndex = 0; // Reset index if the wrong key is pressed
+    }
+  });
+
+  // Function to check password entry
+  const passwords = ['IS THERE', 'ISTHERE', 'IS THERE?', 'IS THEre?'];
+  let passwordIndex = 0;
+  inputField.addEventListener('input', () => {
+    if (inputField.value.trim().toUpperCase() === passwords[passwordIndex]) {
+      passwordIndex++;
+      if (passwordIndex === passwords.length) {
+        // Password entered successfully
+        awardBadge('True Hacker');
+        passwordIndex = 0; // Reset index for future use
+      }
+    } else {
+      passwordIndex = 0; // Reset index if the wrong password is entered
+    }
+  });
+
+  }
+// Call the function to start listening for the Konami code
+checkKonamiCode();
+
+function showHiddenText() {
+  const hiddenTextContainer = document.createElement('div');
+  hiddenTextContainer.id = 'hidden-text-container';
+  hiddenTextContainer.innerHTML = '<p id="hidden-text"><span>T</span><span>H</span><span>E</span><span>R</span><span>E</span><span>I</span><span>S</span><span>N</span><span>O</span><span>S</span><span>P</span><span>O</span><span>O</span><span>N</span></p>';
+  document.body.appendChild(hiddenTextContainer);
+
+  // Remove the hidden text after 5 seconds
+  setTimeout(() => {
+    hiddenTextContainer.remove();
+  }, 3000);
+
+  const hiddenText = hiddenTextContainer.querySelector('#hidden-text');
+  hiddenText.addEventListener('mouseup', function () {
+    const selection = window.getSelection().toString();
+    if (selection === 'THERE IS NO SPOON') {
+      awardBadge('True Hacker');
+      // Remove the hidden text container after successfully revealing the hidden message
+      hiddenTextContainer.remove();
+    }
+  });
+}
+
+// Function to update input field text
+function updateInputText() {
+  const inputLabel = document.querySelector('label[for="secret-code"]');
+  if (inputLabel) {
+    inputLabel.textContent = "YOU KNOW THE EDOC!";
+  }
+}
+
+if (localStorage.getItem('visitedGithub') === 'true') {
+  awardBadge('Real One');
+}
