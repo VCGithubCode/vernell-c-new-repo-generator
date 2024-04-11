@@ -1,17 +1,17 @@
-  // Check if the user has achieved all 5 star badges
-  const badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
-  const messageAlreadyDisplayed = localStorage.getItem('thankYouMessageDisplayed') === 'true';
+// Check if the user has achieved all 5 star badges
+const badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
+const messageAlreadyDisplayed = localStorage.getItem('thankYouMessageDisplayed') === '';
 
-  if (badgeCount >= 5 && !messageAlreadyDisplayed) {
-    const message = document.createElement("p");
-    message.textContent = "Vernell thanks you so much for being a part of his tech journey! Keep in touch!";
-    message.style.fontSize = "1em"; // Adjust font size to match paragraph
-    message.style.marginTop = "10px"; // Add some margin top for spacing
-    document.body.appendChild(message);
+if (badgeCount >= 5 && !messageAlreadyDisplayed) {
+  const message = document.createElement("p");
+  message.textContent = "Vernell thanks you so much for being a part of his tech journey! Keep in touch!";
+  message.style.fontSize = "1em"; // Adjust font size to match paragraph
+  message.style.marginTop = "10px"; // Add some margin top for spacing
+  document.body.appendChild(message);
 
-    // Set flag to indicate that the message has been displayed
-    localStorage.setItem('thankYouMessageDisplayed', 'true');
-  }
+  // Set flag to indicate that the message has been displayed
+  localStorage.setItem('thankYouMessageDisplayed', 'true');
+}
 
 // Function to display the working message
 function displayWorkingMessage() {
