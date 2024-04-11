@@ -11,6 +11,10 @@ body {
   text-align: center;
 }
 
+h1, h2 {
+  margin: 2rem auto;
+}
+
 p {
   margin: 10px;
   font-size: 24px;
