@@ -136,21 +136,16 @@ button {
   font-weight: bold;
   margin-top: 4.2rem; /* Adjust margin-top to move text up */
   text-align: center;
-  animation: blink 0.2s step-end 15; /* Rapidly blink 7 times and then stop */
+  animation: blink 0.2s step-end 15; /* Rapidly blink 15 times and then stop */
 }
 @keyframes blink {
   0%, 100% { color: #000; } /* Start and end with black text */
   50% { color: #fff; } /* Blink to white text in the middle */
 }
 
-.badge {
-  /* ... other properties ... */
-  animation: blink 0.2s step-end 7; /* Rapidly blink 7 times and then stop */
-}
-
 .badge-container .badge span {
   display: block; /* Makes each span start on a new line */
-  text-align: center; /* Center the text within the block */
+  text-align: center;
 }
 
 @keyframes fadeInOut {
@@ -189,7 +184,7 @@ button {
 }
 
 .text-container {
-  margin-top: 2rem; /* Adjust this value as needed */
+  margin-top: 2rem;
 }
 
 #hidden-text {
