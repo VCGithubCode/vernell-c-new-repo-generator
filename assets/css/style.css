@@ -130,11 +130,11 @@ button {
 }
 
 .badge {
-  color: #fff;
-  font-size: 0.75rem; /* Adjust the font size as needed */
+  color: #000000;
+  font-size: 0.65rem; /* Adjust the font size as needed */
   word-wrap: wrap;
   font-weight: bold;
-  margin-top: 4.5rem; /* Adjust margin-top to move text up */
+  margin-top: 4.2rem; /* Adjust margin-top to move text up */
   text-align: center;
   animation: blink 0.2s step-end 15; /* Rapidly blink 7 times and then stop */
 }
@@ -157,4 +157,41 @@ button {
   0% { opacity: 0; }
   10%, 90% { opacity: 1; }
   100% { opacity: 0; }
+}
+
+.input-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  background: #ff0000;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.input-container label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.input-container input[type="text"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: calc(100% - 24px); /* minus padding and border */
+}
+
+.input-container > button {
+  margin-top: 1rem;
+}
+
+.text-container {
+  margin-top: 2rem; /* Adjust this value as needed */
+}
+
+#hidden-text {
+  margin-top: 8rem;
 }
