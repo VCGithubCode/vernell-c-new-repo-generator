@@ -1,26 +1,4 @@
   // Check if the user has achieved all 5 star badges
-  const badgeCount = localStorage.getItem('badgeCount') || 0;
-  if (parseInt(badgeCount) >= 5) {
-    const message = document.createElement("p");
-    message.textContent = "Vernell C. thanks you so much for being a part of his tech journey! Please keep in touch!";
-    message.style.fontSize = "1em"; // Adjust font size to match paragraph
-    message.style.marginTop = "10px"; // Add some margin top for spacing
-    document.body.appendChild(message);
-  }
-
-// Function to display the working message
-function displayWorkingMessage() {
-  const paragraph = document.createElement("p");
-  paragraph.textContent = "It's working! Yay!";
-  document.body.appendChild(paragraph);
-
-  setInterval(() => {
-    if (paragraph.style.animation === "") {
-      paragraph.style.animation = "1s color-change infinite";
-    }
-  }, 500);
-
-  // Check if the user has achieved all 5 star badges
   const badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
   const messageAlreadyDisplayed = localStorage.getItem('thankYouMessageDisplayed') === 'true';
 
@@ -34,9 +12,21 @@ function displayWorkingMessage() {
     // Set flag to indicate that the message has been displayed
     localStorage.setItem('thankYouMessageDisplayed', 'true');
   }
-}
 
-// Call the function to display the working message
+// Function to display the working message
+function displayWorkingMessage() {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = "It's working! Yay!";
+  document.body.appendChild(paragraph);
+
+  setInterval(() => {
+    if (paragraph.style.animation === "") {
+      paragraph.style.animation = "1s color-change infinite";
+    }
+  }, 500);
+  }
+
+// Display the working message
 displayWorkingMessage();
 
 const swalWithBootstrapButtons = Swal.mixin({
@@ -48,7 +38,7 @@ const swalWithBootstrapButtons = Swal.mixin({
 });
 const jsConfetti = new JSConfetti();
 
-// Function to trigger the alert and confetti
+// Trigger the alert and confetti
 function showAlertAndConfetti() {
   jsConfetti.addConfetti({
     emojis: ['⭐', '🌟', '💫', '✩', '✮', '🎸'],
@@ -80,7 +70,7 @@ document.addEventListener('contextmenu', function(e) {
   showAlertAndConfetti();
 });
 
-// Function to handle awarding badges
+// Award badges
 function awardBadge(badgeName) {
   const badgeContainer = document.createElement('div');
   const words = badgeName.split(' '); // Split the badge name into words
@@ -104,7 +94,7 @@ function awardBadge(badgeName) {
   }, 5000);
 }
 
-// Function to check for text selection
+// Check for text selection
 function checkForSelection() {
   const selection = window.getSelection();
   const interactiveWord = document.getElementById('interactive-word');
@@ -118,7 +108,7 @@ document.addEventListener('mouseup', checkForSelection);
 document.addEventListener('touchend', checkForSelection); // For touch devices
 
 
-// Function to create an input field
+// Create an input field
 function createInputField() {
   const inputContainer = document.createElement('div');
   inputContainer.className = 'input-container';
@@ -133,12 +123,12 @@ function createInputField() {
   submitButton.addEventListener('click', handleSubmitButtonClick);
 }
 
-// Function to handle submit button click
+// Handle submit button click
 function handleSubmitButtonClick() {
   checkPasswordAndAwardBadge();
 }
 
-// Function to check password entry and award badge
+// Check password entry and award badge
 function checkPasswordAndAwardBadge() {
   const inputField = document.getElementById('secret-code');
   const enteredText = inputField.value.trim().toUpperCase();
@@ -156,7 +146,7 @@ function checkPasswordAndAwardBadge() {
   }
 }
 
-// Function to remove the input container
+// Remove the input container
 function removeInputContainer() {
   const inputContainer = document.querySelector('.input-container');
   if (inputContainer) {
@@ -164,7 +154,7 @@ function removeInputContainer() {
   }
 }
 
-// Function to show feedback message
+// Show feedback message
 function showFeedbackMessage(message) {
   const feedbackMessage = document.createElement('div');
   feedbackMessage.textContent = message;
@@ -198,7 +188,7 @@ document.addEventListener('keydown', function(event) {
 const inputField = document.getElementById('secret-code');
 
 
-// Function to check Konami code entry
+// Check Konami code entry
 function checkKonamiCode() {
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'Enter'];
   let konamiIndex = 0;
@@ -208,17 +198,17 @@ function checkKonamiCode() {
       konamiIndex++;
       if (konamiIndex === konamiCode.length) {
         // Konami code entered successfully
-        showHiddenText(); // Call function to show hidden text
+        showHiddenText();
         awardBadge('True Hacker'); // Award the True Hacker badge
         konamiIndex = 0; // Reset index for future use
-        updateInputText(); // Call function to update input text
+        updateInputText();
       }
     } else {
       konamiIndex = 0; // Reset index if the wrong key is pressed
     }
   });
 
-  // Function to check password entry
+  // Check password entry
   const passwords = ['IS THERE', 'ISTHERE', 'IS THERE?', 'IS THEre?'];
   let passwordIndex = 0;
   inputField.addEventListener('input', () => {
@@ -235,7 +225,7 @@ function checkKonamiCode() {
   });
 
   }
-// Call the function to start listening for the Konami code
+// Start listening for the Konami code
 checkKonamiCode();
 
 function showHiddenText() {
@@ -244,7 +234,7 @@ function showHiddenText() {
   hiddenTextContainer.innerHTML = '<p id="hidden-text"><span>T</span><span>H</span><span>E</span><span>R</span><span>E</span><span>I</span><span>S</span><span>N</span><span>O</span><span>S</span><span>P</span><span>O</span><span>O</span><span>N</span></p>';
   document.body.appendChild(hiddenTextContainer);
 
-  // Remove the hidden text after 5 seconds
+  // Remove the hidden text after 3 seconds
   setTimeout(() => {
     hiddenTextContainer.remove();
   }, 3000);
@@ -260,7 +250,7 @@ function showHiddenText() {
   });
 }
 
-// Function to update input field text
+// Update input field text
 function updateInputText() {
   const inputLabel = document.querySelector('label[for="secret-code"]');
   if (inputLabel) {
