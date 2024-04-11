@@ -112,3 +112,49 @@ button {
 .btn-cancel:hover {
   background-color: #454545; /* Darker shade for hover effect */
 }
+
+.badge-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 200px; /* Set a fixed width for the star */
+  height: 200px; /* Set a fixed height for the star */
+  display: flex; /* Use flexbox to align content */
+  align-items: flex-start; /* Align content to the top */
+  justify-content: center; /* Center content horizontally */
+  background: gold;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: fadeInOut 5s linear forwards;
+}
+
+.badge {
+  color: #fff;
+  font-size: 0.75rem; /* Adjust the font size as needed */
+  word-wrap: wrap;
+  font-weight: bold;
+  margin-top: 4.5rem; /* Adjust margin-top to move text up */
+  text-align: center;
+  animation: blink 0.2s step-end 15; /* Rapidly blink 7 times and then stop */
+}
+@keyframes blink {
+  0%, 100% { color: #000; } /* Start and end with black text */
+  50% { color: #fff; } /* Blink to white text in the middle */
+}
+
+.badge {
+  /* ... other properties ... */
+  animation: blink 0.2s step-end 7; /* Rapidly blink 7 times and then stop */
+}
+
+.badge-container .badge span {
+  display: block; /* Makes each span start on a new line */
+  text-align: center; /* Center the text within the block */
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10%, 90% { opacity: 1; }
+  100% { opacity: 0; }
+}
