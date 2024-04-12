@@ -93,6 +93,7 @@ button {
   border: none;
   border-radius: 0.3em;
   padding: 10px 24px;
+  margin-bottom: 1.1rem;
   font-size: 1em;
 }
 
@@ -106,6 +107,7 @@ button {
   border: none;
   border-radius: 0.3em;
   padding: 10px 24px;
+  margin-bottom: 1rem;
   font-size: 1em;
 }
 
@@ -183,10 +185,40 @@ button {
   margin-top: 1rem;
 }
 
+.strikeout {
+  position: relative;
+}
+
+.strikeout::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+}
+
+.strikeout::after {
+  content: 'X';
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: black;
+}
+
 .text-container {
   margin-top: 2rem;
 }
 
 #hidden-text {
   margin-top: 8rem;
+}
+
+.feedback-message {
+  position: fixed;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  animation: 1s color-change infinite;
 }
