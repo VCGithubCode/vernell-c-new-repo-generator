@@ -162,7 +162,7 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9998;
-  background: #ff0000;
+  background: linear-gradient(#fc9595 0%, rgba(255, 0, 0, 0.892) 100%);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -177,12 +177,20 @@ button {
 .input-container input[type="text"] {
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 0.125rem solid #c5bcbc;
   width: calc(100% - 24px); /* minus padding and border */
 }
 
 .input-container > button {
   margin-top: 1rem;
+    border: 0.125rem solid transparent;
+    background: #0e0e0e;
+    color: floralwhite;
+}
+
+.input-container > button:hover {
+  border: 0.125rem solid rgb(255, 255, 255);
+  box-shadow: 0 0 0 0.125rem hsl(236, 33%, 81%) inset; /* Inset shadow for effect */
 }
 
 .strikeout {
@@ -211,14 +219,23 @@ button {
   margin-top: 2rem;
 }
 
+#hidden-text-container {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
 #hidden-text {
-  margin-top: 8rem;
+  display: inline-block;
+  font-size: 1.2rem;
 }
 
 .feedback-message {
   position: fixed;
+  width: 100%;
   top: 0;
-  left: 25%;
-  right: 25%;
   animation: 1s color-change infinite;
+  text-align: center;
 }
