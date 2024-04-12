@@ -45,7 +45,7 @@ function showAlertAndConfetti() {
     emojiSize: 50,
     confettiNumber: 70,
   });
-  
+
   swalWithBootstrapButtons.fire({
     title: 'Interested in the source code?',
     text: 'Hey 🎸⭐️ Rockstar ⭐️🎸 Instead of only inspecting my code this way... How about you take a second to fork my repo and give it a star ✩ ? Thanks a ton!!! 😌',
@@ -54,21 +54,31 @@ function showAlertAndConfetti() {
     confirmButtonText: 'Yes, take me there!',
     cancelButtonText: 'No, thank you.',
     reverseButtons: true
-}).then((result) => {
-  if (result.isConfirmed) {
-    localStorage.setItem('visitedGithub', 'true'); // Store the user's action
-    awardBadge('Star'); // Award the badge on trust
-  
-    window.location.href = 'https://github.com/VCGithubCode/vernell-c-new-repo-generator';
+  }).then((result) => {
+    if (result.isConfirmed) {
+      localStorage.setItem('visitedGithub', 'true'); // Store the user's action
+      window.location.href = 'https://github.com/VCGithubCode/vernell-c-new-repo-generator';
+    }
+  });
+}
+
+document.addEventListener('keydown', function(event) {
+  // Check for keys used to open DevTools
+  if (event.keyCode === 123 || // F12
+      (event.ctrlKey && event.shiftKey && event.keyCode === 73) || // Ctrl+Shift+I (Windows/Linux)
+      (event.metaKey && event.shiftKey && event.keyCode === 73)) { // Cmd+Shift+I (Mac)
+    event.preventDefault();
+    showAlertAndConfetti();
+    awardBadge('Curiosity');
   }
 });
-}
 
 // Listen for right-click context menu
 document.addEventListener('contextmenu', function(e) {
   e.preventDefault();
   showAlertAndConfetti();
 });
+
 
 // Award badges
 function awardBadge(badgeName) {
@@ -94,6 +104,10 @@ function awardBadge(badgeName) {
   }, 5000);
 }
 
+// Add mouseup event listener to check for selection
+document.addEventListener('mouseup', checkForSelection);
+document.addEventListener('touchend', checkForSelection); // For touch devices
+
 // Check for text selection
 function checkForSelection() {
   const selection = window.getSelection();
@@ -102,10 +116,6 @@ function checkForSelection() {
     awardBadge('World Highlighter');
   }
 }
-
-// Add mouseup event listener to check for selection
-document.addEventListener('mouseup', checkForSelection);
-document.addEventListener('touchend', checkForSelection); // For touch devices
 
 
 // Create an input field
@@ -206,19 +216,7 @@ document.addEventListener('dblclick', function(event) {
   }
 });
 
-document.addEventListener('keydown', function(event) {
-  // Check for keys used to open DevTools
-  if (event.keyCode === 123 || // F12
-      (event.ctrlKey && event.shiftKey && event.keyCode === 73) || // Ctrl+Shift+I (Windows/Linux)
-      (event.metaKey && event.shiftKey && event.keyCode === 73)) { // Cmd+Shift+I (Mac)
-    event.preventDefault();
-    showAlertAndConfetti();
-    awardBadge('Curiosity');
-  }
-});
-
 const inputField = document.getElementById('secret-code');
-
 
 // Check Konami code entry
 function checkKonamiCode(inputField) {
@@ -247,7 +245,7 @@ checkKonamiCode();
 function showHiddenText() {
   const hiddenTextContainer = document.createElement('div');
   hiddenTextContainer.id = 'hidden-text-container';
-  hiddenTextContainer.innerHTML = '<p id="hidden-text"><span>T</span><span>H</span><span>E</span><span>R</span><span>E</span><span>I</span><span>S</span><span>N</span><span>O</span><span>S</span><span>P</span><span>O</span><span>O</span><span>N</span></p>';
+  hiddenTextContainer.innerHTML = '<p id="hidden-text">THERE IS NO SPOON</p>';
   document.body.appendChild(hiddenTextContainer);
 
   // Remove the hidden text after 3 seconds
@@ -270,7 +268,23 @@ function showHiddenText() {
 function updateInputText() {
   const inputLabel = document.querySelector('label[for="secret-code"]');
   if (inputLabel) {
-    inputLabel.textContent = "YOU KNOW THE EDOC!";
+    // Define the initial label text with <span> elements and the "strikeout" class
+    const labelText = "YOU KNOW THE <span class='strikeout'>E</span><span class='strikeout'>D</span>OC!";
+    // Update the innerHTML of the label with the dynamically generated HTML
+    inputLabel.innerHTML = labelText;
+
+    // Add double click event listener to the label
+    inputLabel.addEventListener('dblclick', function() {
+      // Toggle the 'reverse-strikeout' class on double click
+      this.classList.toggle('reverse-strikeout');
+      // Toggle between "EDOC" and "CODE" text
+      const currentText = this.textContent;
+      if (currentText === "EDOC") {
+        this.textContent = "CODE";
+      } else {
+        this.innerHTML = "<span class='strikeout'>E</span><span class='strikeout'>D</span>OC";
+      }
+    });
   }
 }
 
