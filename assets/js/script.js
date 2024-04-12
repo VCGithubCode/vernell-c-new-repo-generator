@@ -65,7 +65,6 @@ document.addEventListener('contextmenu', function(e) {
   showAlertAndConfetti();
 });
 
-
 // Award badges
 function awardBadge(badgeName) {
   const badgeContainer = document.createElement('div');
@@ -113,7 +112,6 @@ function checkForSelection() {
     awardBadge('World Highlighter');
   }
 }
-
 
 // Create an input field
 function createInputField() {
@@ -311,9 +309,27 @@ function updateInputText() {
     // Update the innerHTML of the label with the dynamically generated HTML
     inputLabel.innerHTML = labelText;
 
+    // Declare lastTouchEnd variable
+    let lastTouchEnd = 0;
+
     // Add double click event listener to the label
-    inputLabel.addEventListener('dblclick', function() {
-      // Toggle the 'reverse-strikeout' class on double click
+    inputLabel.addEventListener('dblclick', toggleTextLabel);
+    // Add touchend event listener to the label
+    inputLabel.addEventListener('touchend', handleTouchEnd);
+
+    // Function to handle touch end event
+    function handleTouchEnd(event) {
+      // Check if the touch event was triggered twice in a short timeframe
+      if (event.timeStamp - lastTouchEnd < 300) {
+        // If so, trigger the toggleTextLabel function
+        toggleTextLabel.call(this);
+      }
+      lastTouchEnd = event.timeStamp;
+    }
+
+    // Function to toggle the text label
+    function toggleTextLabel() {
+      // Toggle the 'reverse-strikeout' class on double click or double tap
       this.classList.toggle('reverse-strikeout');
       // Toggle between "EDOC" and "CODE" text
       const currentText = this.textContent;
@@ -322,7 +338,7 @@ function updateInputText() {
       } else {
         this.innerHTML = "<span class='strikeout'>E</span><span class='strikeout'>D</span>?OC";
       }
-    });
+    }
   }
 }
 
@@ -340,7 +356,6 @@ if (badgeCount >= 5 && !messageAlreadyDisplayed) {
   // Set flag to indicate that the message has been displayed
   localStorage.setItem('thankYouMessageDisplayed', 'true');
 }
-
 
 if (localStorage.getItem('visitedGithub') === 'true') {
   awardBadge('Real One');
