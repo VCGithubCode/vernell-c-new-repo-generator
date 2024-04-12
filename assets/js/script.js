@@ -1,30 +1,16 @@
-// Check if the user has achieved all 5 star badges
-const badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
-const messageAlreadyDisplayed = localStorage.getItem('thankYouMessageDisplayed') === '';
-
-if (badgeCount >= 5 && !messageAlreadyDisplayed) {
-  const message = document.createElement("p");
-  message.textContent = "Vernell thanks you so much for being a part of his tech journey! Keep in touch!";
-  message.style.fontSize = "1em"; // Adjust font size to match paragraph
-  message.style.marginTop = "10px"; // Add some margin top for spacing
-  document.body.appendChild(message);
-
-  // Set flag to indicate that the message has been displayed
-  localStorage.setItem('thankYouMessageDisplayed', 'true');
-}
-
 // Function to display the working message
 function displayWorkingMessage() {
   const paragraph = document.createElement("p");
   paragraph.textContent = "It's working! Yay!";
   document.body.appendChild(paragraph);
 
+  // Add animation to the paragraph
   setInterval(() => {
-    if (paragraph.style.animation === "") {
-      paragraph.style.animation = "1s color-change infinite";
+    if (!paragraph.style.animation) {
+      paragraph.style.animation = "color-change 1s infinite";
     }
   }, 500);
-  }
+}
 
 // Display the working message
 displayWorkingMessage();
@@ -104,6 +90,17 @@ function awardBadge(badgeName) {
   }, 5000);
 }
 
+// Add touch and dblclick event listeners to badge container
+document.addEventListener('touchend', handleBadgeInteraction);
+document.addEventListener('dblclick', handleBadgeInteraction);
+
+// Function to handle badge interaction
+function handleBadgeInteraction(event) {
+  if (event.target.className.includes('badge')) {
+    createInputField();
+  }
+}
+
 // Add mouseup event listener to check for selection
 document.addEventListener('mouseup', checkForSelection);
 document.addEventListener('touchend', checkForSelection); // For touch devices
@@ -145,24 +142,6 @@ function handleSubmitAnswerButtonClick() {
 // Handle remove container button click
 function handleRemoveContainerButtonClick() {
   removeInputContainer();
-}
-
-// Check password entry and award badge
-function checkPasswordAndAwardBadge() {
-  const inputField = document.getElementById('secret-code');
-  const enteredText = inputField.value.trim().toUpperCase();
-  const passwords = ['IS THERE', 'ISTHERE', 'IS THERE?', 'ISTHERE?'];
-
-  if (passwords.includes(enteredText)) {
-    // Correct password entered
-    awardBadge('Question Everything');
-    inputField.value = ''; // Clear the input field
-    removeInputContainer();
-  } else {
-    // Incorrect password entered
-    inputField.value = ''; // Clear the input field
-    showFeedbackMessage("Find the code, find the clue...");
-  }
 }
 
 // Handle submit button click
@@ -209,17 +188,23 @@ function showFeedbackMessage(message) {
   }, 2000);
 }
 
-// Add dblclick event listener to badge container
-document.addEventListener('dblclick', function(event) {
-  if (event.target.className.includes('badge')) {
-    createInputField();
-  }
-});
-
-const inputField = document.getElementById('secret-code');
+const konamiSwipeCode = [
+  { direction: 'up' },
+  { direction: 'up' },
+  { direction: 'down' },
+  { direction: 'down' },
+  { direction: 'left' },
+  { direction: 'right' },
+  { direction: 'left' },
+  { direction: 'right' },
+  { direction: 'tap' }, // A tap can be the final action instead of 'KeyB' and 'KeyA'
+  { direction: 'tap' }, // A tap can be the final action instead of 'KeyB' and 'KeyA'
+  { direction: 'tap' } // A tap can be the final action instead of 'Enter'
+];
+let swipeIndex = 0;
 
 // Check Konami code entry
-function checkKonamiCode(inputField) {
+function checkKonamiCode() {
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'Enter'];
   let konamiIndex = 0;
 
@@ -238,9 +223,62 @@ function checkKonamiCode(inputField) {
     }
   });
 }
-  
-// Start listening for the Konami code
+
+// Function to handle touch start event
+function handleTouchStart(event) {
+  const touch = event.touches[0];
+  startX = touch.clientX;
+  startY = touch.clientY;
+}
+
+// Function to handle touch end event
+function handleTouchEnd(event) {
+  const touch = event.changedTouches[0];
+  const endX = touch.clientX;
+  const endY = touch.clientY;
+  const deltaX = endX - startX;
+  const deltaY = endY - startY;
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  let direction;
+
+  if (distance < 50) {
+    direction = 'tap'; // Consider small movements as taps
+  } else {
+    const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+    if (angle > -45 && angle <= 45) {
+      direction = 'right';
+    } else if (angle > 45 && angle <= 135) {
+      direction = 'down';
+    } else if (angle > -135 && angle <= -45) {
+      direction = 'up';
+    } else {
+      direction = 'left';
+    }
+  }
+
+  // Check if the current swipe matches the Konami code
+  if (konamiSwipeCode[swipeIndex].direction === direction &&
+      (!konamiSwipeCode[swipeIndex].distance || distance >= konamiSwipeCode[swipeIndex].distance)) {
+    swipeIndex++;
+    if (swipeIndex === konamiSwipeCode.length) {
+      // Konami code entered successfully
+      showHiddenText();
+      awardBadge('True Hacker');
+      swipeIndex = 0; // Reset index for future use
+      updateInputText();
+    }
+  } else {
+    swipeIndex = 0; // Reset index if the wrong swipe is performed
+  }
+}
+
+// Add event listener for Konami code entry
 checkKonamiCode();
+
+// Add event listeners for touch events
+document.addEventListener('touchstart', handleTouchStart);
+document.addEventListener('touchend', handleTouchEnd);
 
 function showHiddenText() {
   const hiddenTextContainer = document.createElement('div');
@@ -248,10 +286,10 @@ function showHiddenText() {
   hiddenTextContainer.innerHTML = '<p id="hidden-text">THERE IS NO SPOON</p>';
   document.body.appendChild(hiddenTextContainer);
 
-  // Remove the hidden text after 3 seconds
+  // Remove the hidden text after 5 seconds
   setTimeout(() => {
     hiddenTextContainer.remove();
-  }, 3000);
+  }, 5000);
 
   const hiddenText = hiddenTextContainer.querySelector('#hidden-text');
   hiddenText.addEventListener('mouseup', function () {
@@ -269,7 +307,7 @@ function updateInputText() {
   const inputLabel = document.querySelector('label[for="secret-code"]');
   if (inputLabel) {
     // Define the initial label text with <span> elements and the "strikeout" class
-    const labelText = "YOU KNOW THE <span class='strikeout'>E</span><span class='strikeout'>D</span>OC!";
+    const labelText = "YOU KNOW THE !<span class='strikeout'>E</span><span class='strikeout'>D</span>OC";
     // Update the innerHTML of the label with the dynamically generated HTML
     inputLabel.innerHTML = labelText;
 
@@ -279,14 +317,30 @@ function updateInputText() {
       this.classList.toggle('reverse-strikeout');
       // Toggle between "EDOC" and "CODE" text
       const currentText = this.textContent;
-      if (currentText === "EDOC") {
-        this.textContent = "CODE";
+      if (currentText === "ED?OC") {
+        this.textContent = "?CODE";
       } else {
-        this.innerHTML = "<span class='strikeout'>E</span><span class='strikeout'>D</span>OC";
+        this.innerHTML = "<span class='strikeout'>E</span><span class='strikeout'>D</span>?OC";
       }
     });
   }
 }
+
+// Check if the user has achieved all 5 star badges
+const badgeCount = parseInt(localStorage.getItem('badgeCount')) || 0;
+const messageAlreadyDisplayed = localStorage.getItem('thankYouMessageDisplayed') === '';
+
+if (badgeCount >= 5 && !messageAlreadyDisplayed) {
+  const message = document.createElement("p");
+  message.textContent = "Vernell thanks you so much for being a part of his tech journey! Keep in touch!";
+  message.style.fontSize = "1em"; // Adjust font size to match paragraph
+  message.style.marginTop = "10px"; // Add some margin top for spacing
+  document.body.appendChild(message);
+
+  // Set flag to indicate that the message has been displayed
+  localStorage.setItem('thankYouMessageDisplayed', 'true');
+}
+
 
 if (localStorage.getItem('visitedGithub') === 'true') {
   awardBadge('Real One');
