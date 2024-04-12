@@ -115,12 +115,44 @@ function createInputField() {
   inputContainer.innerHTML = `
     <label for="secret-code">Enter the password if you know the code:</label>
     <input type="text" id="secret-code" name="secret-code">
-    <button id="submit-button">Submit</button>
+    <button id="submit-answer-button">Submit Answer</button>
+    <button id="remove-container-button">Inevitable</button>
   `;
   document.body.appendChild(inputContainer);
 
-  const submitButton = inputContainer.querySelector('#submit-button');
-  submitButton.addEventListener('click', handleSubmitButtonClick);
+  const submitAnswerButton = inputContainer.querySelector('#submit-answer-button');
+  const removeContainerButton = inputContainer.querySelector('#remove-container-button');
+
+  submitAnswerButton.addEventListener('click', handleSubmitAnswerButtonClick);
+  removeContainerButton.addEventListener('click', handleRemoveContainerButtonClick);
+}
+
+// Handle submit answer button click
+function handleSubmitAnswerButtonClick() {
+  checkPasswordAndAwardBadge();
+}
+
+// Handle remove container button click
+function handleRemoveContainerButtonClick() {
+  removeInputContainer();
+}
+
+// Check password entry and award badge
+function checkPasswordAndAwardBadge() {
+  const inputField = document.getElementById('secret-code');
+  const enteredText = inputField.value.trim().toUpperCase();
+  const passwords = ['IS THERE', 'ISTHERE', 'IS THERE?', 'ISTHERE?'];
+
+  if (passwords.includes(enteredText)) {
+    // Correct password entered
+    awardBadge('Question Everything');
+    inputField.value = ''; // Clear the input field
+    removeInputContainer();
+  } else {
+    // Incorrect password entered
+    inputField.value = ''; // Clear the input field
+    showFeedbackMessage("Find the code, find the clue...");
+  }
 }
 
 // Handle submit button click
@@ -189,7 +221,7 @@ const inputField = document.getElementById('secret-code');
 
 
 // Check Konami code entry
-function checkKonamiCode() {
+function checkKonamiCode(inputField) {
   const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA', 'Enter'];
   let konamiIndex = 0;
 
@@ -207,24 +239,8 @@ function checkKonamiCode() {
       konamiIndex = 0; // Reset index if the wrong key is pressed
     }
   });
-
-  // Check password entry
-  const passwords = ['IS THERE', 'ISTHERE', 'IS THERE?', 'IS THEre?'];
-  let passwordIndex = 0;
-  inputField.addEventListener('input', () => {
-    if (inputField.value.trim().toUpperCase() === passwords[passwordIndex]) {
-      passwordIndex++;
-      if (passwordIndex === passwords.length) {
-        // Password entered successfully
-        awardBadge('True Hacker');
-        passwordIndex = 0; // Reset index for future use
-      }
-    } else {
-      passwordIndex = 0; // Reset index if the wrong password is entered
-    }
-  });
-
-  }
+}
+  
 // Start listening for the Konami code
 checkKonamiCode();
 
