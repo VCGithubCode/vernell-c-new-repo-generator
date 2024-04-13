@@ -333,10 +333,14 @@ function updateInputText() {
       this.classList.toggle('reverse-strikeout');
       // Toggle between "EDOC" and "CODE" text
       const currentText = this.textContent;
-      if (currentText === "ED?OC") {
+      if (currentText === "EDOC?") {
         this.textContent = "?CODE";
+      } else if (currentText === "?CODE") {
+        this.textContent = "ED?OC";
+      } else if (currentText === "ED?OC") {
+        this.textContent = "CODE";
       } else {
-        this.innerHTML = "<span class='strikeout'>E</span><span class='strikeout'>D</span>?OC";
+        this.innerHTML = "<span class='strikeout'>E</span><span class='strikeout'>D</span>OC?";
       }
     }
   }
