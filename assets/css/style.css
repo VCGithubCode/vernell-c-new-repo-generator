@@ -251,6 +251,7 @@ button {
 
 .strikeout {
   position: relative;
+  color: #ff0000;
 }
 
 .strikeout::before {
@@ -268,7 +269,7 @@ button {
   position: absolute;
   top: 0;
   left: 0;
-  color: rgba(5, 5, 5, 0.555);
+  color: rgba(255, 255, 255, 0.555);
 }
 
 .text-container {
