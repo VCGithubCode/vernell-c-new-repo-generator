@@ -47,7 +47,6 @@ body {
 }
 
 .container {
-  display: grid;
   grid-template-rows: auto 1fr auto;
 }
 
@@ -61,6 +60,7 @@ header {
   align-content: center;
   border-top: 0.025rem solid #ffffff;
   border-bottom: 0.025rem solid #ffffff;
+  z-index: 1100;
 }
 
 main {
@@ -308,4 +308,5 @@ footer {
   align-content: center;
   border-top: 0.025rem solid #ffffff;
   border-bottom: 0.025rem solid #ffffff;
+  z-index: 1100;
 }
